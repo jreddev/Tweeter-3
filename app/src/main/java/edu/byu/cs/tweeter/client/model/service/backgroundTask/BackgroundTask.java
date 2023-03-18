@@ -5,15 +5,30 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-public abstract class BackgroundTask implements Runnable {
+import androidx.annotation.NonNull;
 
-    private static final String LOG_TAG = "Task";
+import java.io.IOException;
+
+import edu.byu.cs.tweeter.util.FakeData;
+
+public abstract class BackgroundTask implements Runnable {
+    private static final String LOG_TAG = "BackgroundTask";
 
     public static final String SUCCESS_KEY = "success";
     public static final String MESSAGE_KEY = "message";
     public static final String EXCEPTION_KEY = "exception";
 
-    protected final Handler messageHandler;
+    public static final String USER_KEY = "user";
+    public static final String AUTH_TOKEN_KEY = "auth-token";
+    public static final String COUNT_KEY = "count";
+    public static final String IS_FOLLOWER_KEY = "is-follower";
+    public static final String MORE_PAGES_KEY = "more-pages";
+    public static final String ITEMS_KEY = "items";
+
+    /**
+     * Message handler that will receive task results.
+     */
+    private final Handler messageHandler;
 
     protected BackgroundTask(Handler messageHandler) {
         this.messageHandler = messageHandler;
@@ -23,47 +38,53 @@ public abstract class BackgroundTask implements Runnable {
     public void run() {
         try {
             runTask();
+            sendSuccessMessage();
         } catch (Exception ex) {
             Log.e(LOG_TAG, ex.getMessage(), ex);
             sendExceptionMessage(ex);
         }
     }
 
-    // This method is public instead of protected to make it accessible to test cases
-    public void sendSuccessMessage() {
-        Bundle msgBundle = new Bundle();
-        msgBundle.putBoolean(SUCCESS_KEY, true);
-        loadSuccessBundle(msgBundle);
-        sendMessage(msgBundle);
+    protected void runTask() throws IOException {
+        //Override if used
     }
 
-    // To be overridden by each task to add information to the bundle
+    protected FakeData getFakeData() {
+        return FakeData.getInstance();
+    }
+
     protected void loadSuccessBundle(Bundle msgBundle) {
-        // By default, do nothing
+        //Override if used
     }
 
-    // This method is public instead of protected to make it accessible to test cases
-    public void sendFailedMessage(String message) {
-        Bundle msgBundle = new Bundle();
-        msgBundle.putBoolean(SUCCESS_KEY, false);
+    protected void sendSuccessMessage() {
+        Bundle msgBundle = createBundle(true);
+        loadSuccessBundle(msgBundle);
+        sendBundle(msgBundle);
+    }
+
+    protected void sendFailedMessage(String message) {
+        Bundle msgBundle = createBundle(false);
         msgBundle.putString(MESSAGE_KEY, message);
-        sendMessage(msgBundle);
+        sendBundle(msgBundle);
     }
 
-    // This method is public instead of protected to make it accessible to test cases
-    public void sendExceptionMessage(Exception exception) {
-        Bundle msgBundle = new Bundle();
-        msgBundle.putBoolean(SUCCESS_KEY, false);
+    protected void sendExceptionMessage(Exception exception) {
+        Bundle msgBundle = createBundle(false);
         msgBundle.putSerializable(EXCEPTION_KEY, exception);
-        sendMessage(msgBundle);
+        sendBundle(msgBundle);
     }
 
-    private void sendMessage(Bundle msgBundle) {
+    protected void sendBundle(Bundle msgBundle) {
         Message msg = Message.obtain();
         msg.setData(msgBundle);
-
         messageHandler.sendMessage(msg);
     }
 
-    protected abstract void runTask();
+    @NonNull
+    protected Bundle createBundle(boolean value) {
+        Bundle msgBundle = new Bundle();
+        msgBundle.putBoolean(SUCCESS_KEY, value);
+        return msgBundle;
+    }
 }

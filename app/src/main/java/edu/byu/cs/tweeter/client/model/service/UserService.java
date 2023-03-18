@@ -1,54 +1,101 @@
 package edu.byu.cs.tweeter.client.model.service;
 
-import edu.byu.cs.tweeter.client.model.service.backgroundTask.BackgroundTaskUtils;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
+import java.io.ByteArrayOutputStream;
+import java.util.Base64;
+
+import edu.byu.cs.tweeter.client.cache.Cache;
+import edu.byu.cs.tweeter.client.model.service.backgroundTask.GetUserTask;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.LoginTask;
-import edu.byu.cs.tweeter.client.model.service.backgroundTask.handler.LoginTaskHandler;
-import edu.byu.cs.tweeter.model.domain.AuthToken;
-import edu.byu.cs.tweeter.model.domain.User;
+import edu.byu.cs.tweeter.client.model.service.backgroundTask.LogoutTask;
+import edu.byu.cs.tweeter.client.model.service.backgroundTask.RegisterTask;
+import edu.byu.cs.tweeter.client.model.service.backgroundTask.handler.SimpleNotificationHandler;
+import edu.byu.cs.tweeter.client.model.service.backgroundTask.handler.UserAuthHandler;
+import edu.byu.cs.tweeter.client.model.service.backgroundTask.observer.SimpleNotificationObserver;
+import edu.byu.cs.tweeter.client.model.service.backgroundTask.observer.UserAuthObserver;
 
-/**
- * Contains the business logic to support the login operation.
- */
-public class UserService {
-
-    public static final String URL_PATH = "/login";
-
-    /**
-     * An observer interface to be implemented by observers who want to be notified when
-     * asynchronous operations complete.
-     */
-    public interface LoginObserver {
-        void handleSuccess(User user, AuthToken authToken);
-        void handleFailure(String message);
-        void handleException(Exception exception);
+public class UserService extends Service {
+    public void getProfile(String userAlias, UserAuthObserver observer) {
+        GetUserTask getUserTask = new GetUserTask(Cache.getInstance().getCurrUserAuthToken(),
+                userAlias, new UserAuthHandler(observer, "get_user"));
+        ExecuteTask(getUserTask);
     }
 
-    /**
-     * Creates an instance.
-     *
-     */
-     public UserService() {
-     }
+    public void login(String alias, String password, UserAuthObserver observer) {
+        try {
+            validateLogin(alias, password);
+            observer.setErrorViewText(null);
 
-    /**
-     * Makes an asynchronous login request.
-     *
-     * @param username the user's name.
-     * @param password the user's password.
-     */
-    public void login(String username, String password, LoginObserver observer) {
-        LoginTask loginTask = getLoginTask(username, password, observer);
-        BackgroundTaskUtils.runTask(loginTask);
+            LoginTask loginTask = new LoginTask(alias, password, new UserAuthHandler(observer, "login"));
+            ExecuteTask(loginTask);
+        } catch (Exception e) {
+            observer.setErrorViewText(e);
+        }
     }
 
-    /**
-     * Returns an instance of {@link LoginTask}. Allows mocking of the LoginTask class for
-     * testing purposes. All usages of LoginTask should get their instance from this method to
-     * allow for proper mocking.
-     *
-     * @return the instance.
-     */
-    LoginTask getLoginTask(String username, String password, LoginObserver observer) {
-        return new LoginTask(this, username, password, new LoginTaskHandler(observer));
+    public void Register(String firstName, String lastName, String alias, String password, Drawable image, UserAuthObserver observer) {
+        try{
+            validateRegistration(firstName, lastName, alias, password, image);
+            observer.setErrorViewText(null);
+            observer.handleFailure("Registering...");
+
+            Bitmap image_map = ((BitmapDrawable) image).getBitmap();
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            image_map.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            byte[] imageBytes = bos.toByteArray();
+            String imageBytesBase64 = Base64.getEncoder().encodeToString(imageBytes);
+
+            RegisterTask registerTask = new RegisterTask(firstName, lastName,
+                    alias, password, imageBytesBase64, new UserAuthHandler(observer, "register"));
+            ExecuteTask(registerTask);
+        } catch (Exception e){
+            observer.setErrorViewText(e);
+        }
+
+    }
+
+    private void validateRegistration(String firstName, String lastName, String alias, String password, Drawable image) {
+        if (firstName.length() == 0) {
+            throw new IllegalArgumentException("First Name cannot be empty.");
+        }
+        if (lastName.length() == 0) {
+            throw new IllegalArgumentException("Last Name cannot be empty.");
+        }
+        if (alias.length() == 0) {
+            throw new IllegalArgumentException("Alias cannot be empty.");
+        }
+        if (alias.charAt(0) != '@') {
+            throw new IllegalArgumentException("Alias must begin with @.");
+        }
+        if (alias.length() < 2) {
+            throw new IllegalArgumentException("Alias must contain 1 or more characters after the @.");
+        }
+        if (password.length() == 0) {
+            throw new IllegalArgumentException("Password cannot be empty.");
+        }
+
+        if (image == null) {
+            throw new IllegalArgumentException("Profile image must be uploaded.");
+        }
+    }
+
+    private void validateLogin(String alias, String password) {
+        if (alias.length() > 0 && alias.charAt(0) != '@') {
+            throw new IllegalArgumentException("Alias must begin with @.");
+        }
+        if (alias.length() < 2) {
+            throw new IllegalArgumentException("Alias must contain 1 or more characters after the @.");
+        }
+        if (password.length() == 0) {
+            throw new IllegalArgumentException("Password cannot be empty.");
+        }
+    }
+
+    public void onOptionsItemSelected(SimpleNotificationObserver observer) {
+        LogoutTask logoutTask = new LogoutTask(Cache.getInstance().getCurrUserAuthToken(), new SimpleNotificationHandler(observer));
+        ExecuteTask(logoutTask);
     }
 }
