@@ -13,11 +13,11 @@ public abstract class AuthenticateTask extends BackgroundTask{
     /**
      * The user's username (or "alias" or "handle"). E.g., "@susan".
      */
-    private final String username;
+    protected final String username;
     /**
      * The user's password.
      */
-    private final String password;
+    protected final String password;
 
     private User authenticatedUser;
     private AuthToken authToken;

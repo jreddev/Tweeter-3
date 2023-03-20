@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import java.io.IOException;
 
+import edu.byu.cs.tweeter.client.model.net.ServerFacade;
 import edu.byu.cs.tweeter.util.FakeData;
 
 public abstract class BackgroundTask implements Runnable {
@@ -29,6 +30,8 @@ public abstract class BackgroundTask implements Runnable {
      * Message handler that will receive task results.
      */
     private final Handler messageHandler;
+
+    protected ServerFacade serverFacade;
 
     protected BackgroundTask(Handler messageHandler) {
         this.messageHandler = messageHandler;
@@ -86,5 +89,12 @@ public abstract class BackgroundTask implements Runnable {
         Bundle msgBundle = new Bundle();
         msgBundle.putBoolean(SUCCESS_KEY, value);
         return msgBundle;
+    }
+
+    ServerFacade getServerFacade() {
+        if(serverFacade == null) {
+            serverFacade = new ServerFacade();
+        }
+        return serverFacade;
     }
 }
