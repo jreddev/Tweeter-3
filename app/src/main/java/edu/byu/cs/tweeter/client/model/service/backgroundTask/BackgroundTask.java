@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import java.io.IOException;
 
 import edu.byu.cs.tweeter.client.model.net.ServerFacade;
+import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
 import edu.byu.cs.tweeter.util.FakeData;
 
 public abstract class BackgroundTask implements Runnable {
@@ -48,7 +49,7 @@ public abstract class BackgroundTask implements Runnable {
         }
     }
 
-    protected void runTask() throws IOException {
+    protected void runTask() throws IOException, TweeterRemoteException {
         //Override if used
     }
 
