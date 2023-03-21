@@ -16,19 +16,19 @@ public abstract class PagedTask <T> extends AuthenticatedTask {
      * The user whose feed is being retrieved.
      * (This can be any user, not just the currently logged-in user.)
      */
-    private final User targetUser;
+    protected final User targetUser;
     /**
      * Maximum number of statuses/users to return (i.e., page size).
      */
-    private final int limit;
+    protected final int limit;
     /**
      * The last status returned in the previous page of results (can be null).
      * This allows the new page to begin where the previous page ended.
      */
-    private final T lastItem;
+    protected final T lastItem;
 
-    private List<T> items;
-    private boolean hasMorePages;
+    protected List<T> items;
+    protected boolean hasMorePages;
 
     protected PagedTask(AuthToken authToken, Handler messageHandler, User targetUser, int limit, T lastItem) {
         super(authToken,messageHandler);

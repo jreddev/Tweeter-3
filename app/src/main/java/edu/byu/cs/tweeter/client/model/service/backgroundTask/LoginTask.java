@@ -24,7 +24,12 @@ public class LoginTask extends AuthenticateTask {
 
     @Override
     protected Pair<User, AuthToken> runAuthenticationTask() {
-        try {
+        /*//TODO:: REMOVE OLD PART
+        User user = getFakeData().getFirstUser();
+        AuthToken auth = getFakeData().getAuthToken();
+        return new Pair<>(user,auth);*/
+
+       try {
             LoginRequest request = new LoginRequest(username, password);
             LoginResponse response = getServerFacade().login(request, "/login");
 
@@ -37,6 +42,7 @@ public class LoginTask extends AuthenticateTask {
             sendExceptionMessage(e);
             throw new RuntimeException(e.getMessage());
         }
+
     }
 
 }
