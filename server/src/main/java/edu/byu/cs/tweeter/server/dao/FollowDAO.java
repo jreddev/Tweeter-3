@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.byu.cs.tweeter.model.domain.User;
+import edu.byu.cs.tweeter.model.net.request.FollowRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowersRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
+import edu.byu.cs.tweeter.model.net.response.FollowResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowersResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
 import edu.byu.cs.tweeter.util.FakeData;
@@ -86,6 +88,11 @@ public class FollowDAO {
         }
 
         return new FollowersResponse(responseFollowers, hasMorePages);
+    }
+
+    public FollowResponse follow(FollowRequest request) {
+        assert request.getFolloweeAlias() != null;
+        return new FollowResponse(true);
     }
 
     /**
