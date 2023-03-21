@@ -8,11 +8,13 @@ import edu.byu.cs.tweeter.model.domain.User;
 
 public abstract class GetCountTask extends AuthenticatedTask {
     public static final int COUNT = 20;
+    protected int followersCount;
+    protected int followeesCount;
     /**
      * The user whose following count is being retrieved.
      * (This can be any user, not just the currently logged-in user.)
      */
-    private final User targetUser;
+    protected final User targetUser;
 
     protected GetCountTask(AuthToken authToken, Handler messageHandler, User targetUser) {
         super(authToken, messageHandler);

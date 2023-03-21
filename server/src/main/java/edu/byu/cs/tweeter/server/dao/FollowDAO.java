@@ -27,9 +27,15 @@ public class FollowDAO {
      * @param follower the User whose count of how many following is desired.
      * @return said count.
      */
-    public Integer getFolloweeCount(User follower) {
+    public Integer getFolloweeCount(String followerAlias) {
         // TODO: uses the dummy data.  Replace with a real implementation.
-        assert follower != null;
+        assert followerAlias != null;
+        return getDummyFollowees().size();
+    }
+
+    public Integer getFollowerCount(String followeeAlias) {
+        // TODO: uses the dummy data.  Replace with a real implementation.
+        assert followeeAlias != null;
         return getDummyFollowees().size();
     }
 
