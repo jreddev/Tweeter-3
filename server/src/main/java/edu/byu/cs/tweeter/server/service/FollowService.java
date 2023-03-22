@@ -4,11 +4,13 @@ import edu.byu.cs.tweeter.model.net.request.CountRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowersRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
+import edu.byu.cs.tweeter.model.net.request.GetFeedRequest;
 import edu.byu.cs.tweeter.model.net.request.IsFollowingRequest;
 import edu.byu.cs.tweeter.model.net.response.CountResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowersResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
+import edu.byu.cs.tweeter.model.net.response.GetFeedResponse;
 import edu.byu.cs.tweeter.model.net.response.IsFollowingResponse;
 import edu.byu.cs.tweeter.server.dao.FollowDAO;
 
@@ -72,6 +74,24 @@ public class FollowService {
         else
             return new CountResponse(getFollowingDAO().getFolloweeCount(request.getTargetUserAlias()));
 
+    }
+
+    public GetFeedResponse getFeed(GetFeedRequest request) {
+        if (request.getAuthToken() == null){
+            throw new RuntimeException("[Bad Request] Request needs to have an authtoken");
+        }
+        if (request.getLastStatus() == null){
+            throw new RuntimeException("[Bad Request] Request needs to have a status");
+        }
+        if (request.getTargetUser() == null){
+            throw new RuntimeException("[Bad Request] Request needs to have a target user");
+        }
+        if (request.getLimit() <= 0){
+            throw new RuntimeException("[Bad Request] Request needs to have a limit with a positive value");
+        }
+        else {
+            return getFollowingDAO().getFeed(request);
+        }
     }
 
 

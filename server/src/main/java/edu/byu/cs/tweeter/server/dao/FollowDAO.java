@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.request.FollowRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowersRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
+import edu.byu.cs.tweeter.model.net.request.GetFeedRequest;
 import edu.byu.cs.tweeter.model.net.request.IsFollowingRequest;
 import edu.byu.cs.tweeter.model.net.response.FollowResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowersResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
+import edu.byu.cs.tweeter.model.net.response.GetFeedResponse;
 import edu.byu.cs.tweeter.model.net.response.IsFollowingResponse;
 import edu.byu.cs.tweeter.util.FakeData;
 
@@ -24,7 +27,7 @@ public class FollowDAO {
      * Gets the count of users from the database that the user specified is following. The
      * current implementation uses generated data and doesn't actually access a database.
      *
-     * @param follower the User whose count of how many following is desired.
+     * @param followerAlias the User whose count of how many following is desired.
      * @return said count.
      */
     public Integer getFolloweeCount(String followerAlias) {
@@ -99,6 +102,34 @@ public class FollowDAO {
         return new FollowersResponse(responseFollowers, hasMorePages);
     }
 
+    public GetFeedResponse getFeed(GetFeedRequest request) {
+        // TODO: Generates dummy data. Replace with a real implementation.
+        assert request.getLimit() > 0;
+        assert request.getAuthToken() != null;
+        assert request.getLastStatus() != null;
+        assert request.getTargetUser() != null;
+
+        List<Status> allStatuses = getDummyStatuses();
+        List<Status> responseStatuses = new ArrayList<>(request.getLimit());
+
+        boolean hasMorePages = false;
+
+        if(request.getLimit() > 0) {
+            if (allStatuses != null) {
+                int followersIndex = getStatusStartingIndex(request.getLastStatus().user.getAlias(), allStatuses);
+
+                for(int limitCounter = 0; followersIndex < allStatuses.size() && limitCounter < request.getLimit(); followersIndex++, limitCounter++) {
+                    responseStatuses.add(allStatuses.get(followersIndex));
+                }
+
+                hasMorePages = followersIndex < allStatuses.size();
+            }
+        }
+
+        return new GetFeedResponse(responseStatuses, hasMorePages);
+
+    }
+
     public FollowResponse follow(FollowRequest request) {
         assert request.getFolloweeAlias() != null;
         return new FollowResponse(true);
@@ -140,6 +171,26 @@ public class FollowDAO {
         return followeesIndex;
     }
 
+    private int getStatusStartingIndex(String lastFolloweeAlias, List<Status> allFollowees) {
+
+        int followeesIndex = 0;
+
+        if(lastFolloweeAlias != null) {
+            // This is a paged request for something after the first page. Find the first item
+            // we should return
+            for (int i = 0; i < allFollowees.size(); i++) {
+                if(lastFolloweeAlias.equals(allFollowees.get(i).user.getAlias())) {
+                    // We found the index of the last item returned last time. Increment to get
+                    // to the first one we should return
+                    followeesIndex = i + 1;
+                    break;
+                }
+            }
+        }
+
+        return followeesIndex;
+    }
+
     /**
      * Returns the list of dummy followee data. This is written as a separate method to allow
      * mocking of the followees.
@@ -153,6 +204,8 @@ public class FollowDAO {
     List<User> getDummyFollowers() {
         return getFakeData().getFakeUsers();
     }
+
+    List<Status> getDummyStatuses() {return getFakeData().getFakeStatuses();}
 
     /**
      * Returns the {@link FakeData} object used to generate dummy followees.
