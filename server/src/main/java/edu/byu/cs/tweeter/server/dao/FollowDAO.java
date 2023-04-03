@@ -109,25 +109,24 @@ public class FollowDAO {
         assert request.getLastStatus() != null;
         assert request.getTargetUser() != null;
 
-        List<Status> allStatuses = getDummyStatuses();
-        List<Status> responseStatuses = new ArrayList<>(request.getLimit());
+        return new GetFeedResponse(getFakeData().getPageOfStatus(request.getLastStatus(), request.getLimit()).getFirst(),getFakeData().getPageOfStatus(request.getLastStatus(), request.getLimit()).getSecond() );
+
+        /*List<Status> allStatuses = getDummyStatuses();
+        List<Status> responseStatuses = new ArrayList<>();
 
         boolean hasMorePages = false;
 
         if(request.getLimit() > 0) {
             if (allStatuses != null) {
-                int followersIndex = getStatusStartingIndex(request.getLastStatus().user.getAlias(), allStatuses);
-
-                for(int limitCounter = 0; followersIndex < allStatuses.size() && limitCounter < request.getLimit(); followersIndex++, limitCounter++) {
-                    responseStatuses.add(allStatuses.get(followersIndex));
-                }
-
-                hasMorePages = followersIndex < allStatuses.size();
+                int index = 0;
+                Status last = allStatuses.get(index);
+                responseStatuses = getFakeData().getPageOfStatus(last,request.getLimit()).getFirst();
+                return new GetFeedResponse(getFakeData().getPageOfStatus(last,request.getLimit()).getFirst(),hasMorePages);
             }
         }
 
         return new GetFeedResponse(responseStatuses, hasMorePages);
-
+*/
     }
 
     public FollowResponse follow(FollowRequest request) {
