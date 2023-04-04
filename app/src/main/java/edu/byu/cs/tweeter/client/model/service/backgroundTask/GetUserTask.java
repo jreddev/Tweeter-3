@@ -7,6 +7,11 @@ import java.io.IOException;
 
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
+import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
+import edu.byu.cs.tweeter.model.net.request.GetUserRequest;
+import edu.byu.cs.tweeter.model.net.request.IsFollowingRequest;
+import edu.byu.cs.tweeter.model.net.response.GetUserResponse;
+import edu.byu.cs.tweeter.model.net.response.IsFollowingResponse;
 
 /**
  * Background task that returns the profile for a specified user.
@@ -36,7 +41,15 @@ public class GetUserTask extends AuthenticatedTask {
     }
 
     private User getUser() {
-        User user = getFakeData().findUserByAlias(alias);
-        return user;
+        //User user = getFakeData().findUserByAlias(alias);
+        try {
+            GetUserRequest request = new GetUserRequest(authToken, alias);
+            GetUserResponse response = getServerFacade().getUser(request, "/getuser");
+
+            user = response.getUser();
+            return user;
+        } catch (IOException | TweeterRemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

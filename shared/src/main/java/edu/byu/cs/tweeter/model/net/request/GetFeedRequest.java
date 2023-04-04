@@ -5,10 +5,10 @@ import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.domain.User;
 
 public class GetFeedRequest {
-    private AuthToken authToken;
-    private User targetUser;
-    private int limit;
-    private Status lastStatus;
+    public AuthToken authToken;
+    public User targetUser;
+    public int limit;
+    public Status lastStatus;
 
     private GetFeedRequest(){}
 

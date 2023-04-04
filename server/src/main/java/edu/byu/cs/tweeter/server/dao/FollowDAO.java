@@ -106,7 +106,6 @@ public class FollowDAO {
         // TODO: Generates dummy data. Replace with a real implementation.
         assert request.getLimit() > 0;
         assert request.getAuthToken() != null;
-        assert request.getLastStatus() != null;
         assert request.getTargetUser() != null;
 
         return new GetFeedResponse(getFakeData().getPageOfStatus(request.getLastStatus(), request.getLimit()).getFirst(),getFakeData().getPageOfStatus(request.getLastStatus(), request.getLimit()).getSecond() );

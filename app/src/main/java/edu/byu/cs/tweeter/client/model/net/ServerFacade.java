@@ -7,6 +7,8 @@ import edu.byu.cs.tweeter.model.net.request.CountRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowersRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
+import edu.byu.cs.tweeter.model.net.request.GetFeedRequest;
+import edu.byu.cs.tweeter.model.net.request.GetUserRequest;
 import edu.byu.cs.tweeter.model.net.request.IsFollowingRequest;
 import edu.byu.cs.tweeter.model.net.request.LoginRequest;
 import edu.byu.cs.tweeter.model.net.request.PostStatusRequest;
@@ -15,6 +17,8 @@ import edu.byu.cs.tweeter.model.net.response.CountResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowersResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
+import edu.byu.cs.tweeter.model.net.response.GetFeedResponse;
+import edu.byu.cs.tweeter.model.net.response.GetUserResponse;
 import edu.byu.cs.tweeter.model.net.response.IsFollowingResponse;
 import edu.byu.cs.tweeter.model.net.response.LoginResponse;
 import edu.byu.cs.tweeter.model.net.response.PostStatusResponse;
@@ -63,6 +67,10 @@ public class ServerFacade {
         return clientCommunicator.doPost(urlPath, request, null, FollowersResponse.class);
     }
 
+    public GetFeedResponse getFeed(GetFeedRequest request, String urlPath) throws IOException, TweeterRemoteException {
+        return clientCommunicator.doPost(urlPath, request, null, GetFeedResponse.class);
+    }
+
     public FollowResponse follow(FollowRequest request, String urlPath) throws IOException, TweeterRemoteException {
         return clientCommunicator.doPost(urlPath,request,null,FollowResponse.class);
     }
@@ -77,5 +85,9 @@ public class ServerFacade {
 
     public PostStatusResponse postStatus(PostStatusRequest request, String urlPath) throws IOException, TweeterRemoteException {
         return clientCommunicator.doPost(urlPath, request, null, PostStatusResponse.class);
+    }
+
+    public GetUserResponse getUser(GetUserRequest request, String urlPath) throws IOException, TweeterRemoteException {
+        return clientCommunicator.doPost(urlPath, request, null, GetUserResponse.class);
     }
 }
