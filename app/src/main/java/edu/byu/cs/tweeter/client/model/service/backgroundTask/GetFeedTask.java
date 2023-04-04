@@ -35,7 +35,8 @@ public class GetFeedTask extends PagedStatusTask {
             if (response.isSuccess()) {
                 this.items = response.getStatuses();
                 this.hasMorePages = response.getHasMorePages();
-                sendSuccessMessage();
+                //this.lastItem = response.getStatuses().get(this.items.size() - 1);
+                //sendSuccessMessage();
                 return new Pair<>(items, hasMorePages);
             } else {
                 sendFailedMessage(response.getMessage());

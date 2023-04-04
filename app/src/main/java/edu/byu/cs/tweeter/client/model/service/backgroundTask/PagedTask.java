@@ -25,7 +25,7 @@ public abstract class PagedTask <T> extends AuthenticatedTask {
      * The last status returned in the previous page of results (can be null).
      * This allows the new page to begin where the previous page ended.
      */
-    protected final T lastItem;
+    protected T lastItem;
 
     protected List<T> items;
     protected boolean hasMorePages;
