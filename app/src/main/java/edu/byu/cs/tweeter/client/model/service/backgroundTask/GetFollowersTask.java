@@ -37,7 +37,7 @@ public class GetFollowersTask extends PagedUserTask {
             if (response.isSuccess()) {
                 this.items = response.getFollowers();
                 this.hasMorePages = response.getHasMorePages();
-                sendSuccessMessage();
+                //sendSuccessMessage();
                 return new Pair<>(items, hasMorePages);
             } else {
                 sendFailedMessage(response.getMessage());

@@ -37,7 +37,7 @@ public class FollowTask extends AuthenticatedTask {
             //TODO:: This should add someone to the following table...
 
             if (response.isSuccess()) {
-                sendSuccessMessage();
+                //sendSuccessMessage();
             } else {
                 sendFailedMessage(response.getMessage());
             }

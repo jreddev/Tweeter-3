@@ -37,7 +37,7 @@ public class UnfollowTask extends AuthenticatedTask {
             //TODO:: This should remove someone from the following table...
 
             if (response.isSuccess()) {
-                sendSuccessMessage();
+                //sendSuccessMessage();
             } else {
                 sendFailedMessage(response.getMessage());
             }
