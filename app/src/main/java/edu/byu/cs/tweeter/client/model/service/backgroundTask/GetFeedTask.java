@@ -42,7 +42,7 @@ public class GetFeedTask extends PagedStatusTask {
                 sendFailedMessage(response.getMessage());
             }
         } catch (IOException | TweeterRemoteException ex) {
-            Log.e(LOG_TAG, "Failed to get followers", ex);
+            Log.e(LOG_TAG, "Failed to get feed", ex);
             sendExceptionMessage(ex);
         }
         return null; //should never reach this!

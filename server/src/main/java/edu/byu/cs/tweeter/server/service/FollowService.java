@@ -5,12 +5,14 @@ import edu.byu.cs.tweeter.model.net.request.FollowRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowersRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.net.request.GetFeedRequest;
+import edu.byu.cs.tweeter.model.net.request.GetStoryRequest;
 import edu.byu.cs.tweeter.model.net.request.IsFollowingRequest;
 import edu.byu.cs.tweeter.model.net.response.CountResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowersResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
 import edu.byu.cs.tweeter.model.net.response.GetFeedResponse;
+import edu.byu.cs.tweeter.model.net.response.GetStoryResponse;
 import edu.byu.cs.tweeter.model.net.response.IsFollowingResponse;
 import edu.byu.cs.tweeter.server.dao.FollowDAO;
 
@@ -57,6 +59,17 @@ public class FollowService {
         return getFollowingDAO().getFeed(request);
     }
 
+    public GetStoryResponse getStory(GetStoryRequest request) {
+        if(request.getTargetUser() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have a target user");
+        } else if(request.getLimit() <= 0) {
+            throw new RuntimeException("[Bad Request] Request needs to have a positive limit");
+        } else if(request.getAuthToken() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have an authtoken");
+        }
+        return getFollowingDAO().getStory(request);
+    }
+
     public FollowResponse follow(FollowRequest request) {
         if (request.getFolloweeAlias() == null) {
             throw new RuntimeException("[Bad Request] Request needs to have a followee alias");
@@ -98,5 +111,4 @@ public class FollowService {
     FollowDAO getFollowingDAO() {
         return new FollowDAO();
     }
-
 }

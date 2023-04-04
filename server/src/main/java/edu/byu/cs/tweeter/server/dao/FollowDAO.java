@@ -10,11 +10,13 @@ import edu.byu.cs.tweeter.model.net.request.FollowRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowersRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.net.request.GetFeedRequest;
+import edu.byu.cs.tweeter.model.net.request.GetStoryRequest;
 import edu.byu.cs.tweeter.model.net.request.IsFollowingRequest;
 import edu.byu.cs.tweeter.model.net.response.FollowResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowersResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
 import edu.byu.cs.tweeter.model.net.response.GetFeedResponse;
+import edu.byu.cs.tweeter.model.net.response.GetStoryResponse;
 import edu.byu.cs.tweeter.model.net.response.IsFollowingResponse;
 import edu.byu.cs.tweeter.util.FakeData;
 
@@ -126,6 +128,15 @@ public class FollowDAO {
 
         return new GetFeedResponse(responseStatuses, hasMorePages);
 */
+    }
+
+    public GetStoryResponse getStory(GetStoryRequest request) {
+        // TODO: Generates dummy data. Replace with a real implementation.
+        assert request.getLimit() > 0;
+        assert request.getAuthToken() != null;
+        assert request.getTargetUser() != null;
+
+        return new GetStoryResponse(getFakeData().getPageOfStatus(request.getLastStatus(), request.getLimit()).getFirst(),getFakeData().getPageOfStatus(request.getLastStatus(), request.getLimit()).getSecond() );
     }
 
     public FollowResponse follow(FollowRequest request) {
