@@ -1,7 +1,5 @@
 package edu.byu.cs.tweeter.model.net.response;
 
-import edu.byu.cs.tweeter.model.net.request.CountRequest;
-
 public class CountResponse extends Response {
     private Integer count;
     public CountResponse(String message){super(false, message);}

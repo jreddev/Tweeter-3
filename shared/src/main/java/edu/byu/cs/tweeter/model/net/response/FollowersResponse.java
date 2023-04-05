@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 
 import edu.byu.cs.tweeter.model.domain.User;
-import edu.byu.cs.tweeter.model.net.request.FollowersRequest;
 
 /**
  * A paged response for a {@link edu.byu.cs.tweeter.model.net.request.FollowersRequest}.

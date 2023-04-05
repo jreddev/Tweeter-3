@@ -9,9 +9,7 @@ import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
 import edu.byu.cs.tweeter.model.net.request.GetUserRequest;
-import edu.byu.cs.tweeter.model.net.request.IsFollowingRequest;
 import edu.byu.cs.tweeter.model.net.response.GetUserResponse;
-import edu.byu.cs.tweeter.model.net.response.IsFollowingResponse;
 
 /**
  * Background task that returns the profile for a specified user.

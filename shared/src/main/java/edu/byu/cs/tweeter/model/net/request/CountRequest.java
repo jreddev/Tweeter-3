@@ -1,7 +1,6 @@
 package edu.byu.cs.tweeter.model.net.request;
 
 import edu.byu.cs.tweeter.model.domain.AuthToken;
-import edu.byu.cs.tweeter.model.net.response.CountResponse;
 
 public class CountRequest {
     private String targetUserAlias;

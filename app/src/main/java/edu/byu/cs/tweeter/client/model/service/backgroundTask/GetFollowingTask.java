@@ -6,8 +6,6 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.List;
 
-import edu.byu.cs.tweeter.client.model.net.TweeterServerException;
-import edu.byu.cs.tweeter.client.model.service.FollowService;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;

@@ -6,10 +6,7 @@ import android.util.Log;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.request.CountRequest;
-import edu.byu.cs.tweeter.model.net.request.LoginRequest;
 import edu.byu.cs.tweeter.model.net.response.CountResponse;
-import edu.byu.cs.tweeter.model.net.response.LoginResponse;
-import edu.byu.cs.tweeter.util.Pair;
 
 /**
  * Background task that queries how many followers a user has.
