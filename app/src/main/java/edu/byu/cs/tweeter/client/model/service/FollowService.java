@@ -20,20 +20,19 @@ import edu.byu.cs.tweeter.client.model.service.backgroundTask.observer.SimpleBoo
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.observer.SimpleIntObserver;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.observer.SimpleListObserver;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.observer.SimpleNotificationObserver;
+import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.domain.User;
 
 public class FollowService extends Service {
 
-    public void loadMoreItems(User user, int pageSize, User lastFollow, String type, SimpleListObserver<User> observer) {
+    public void loadMoreItems(AuthToken token, User user, int pageSize, User lastFollow, String type, SimpleListObserver<User> observer) {
         if (Objects.equals(type, "following")){
-            GetFollowingTask getFollowingTask = new GetFollowingTask(Cache.getInstance().getCurrUserAuthToken(),
-                    user, pageSize, lastFollow, new SimpleListHandler<User>(observer, "following"));
+            GetFollowingTask getFollowingTask = new GetFollowingTask(token, user, pageSize, lastFollow, new SimpleListHandler<User>(observer, "following"));
             ExecuteTask(getFollowingTask);
         }
         else if (Objects.equals(type, "followers")){
-            GetFollowersTask getFollowersTask = new GetFollowersTask(Cache.getInstance().getCurrUserAuthToken(),
-                    user, pageSize, lastFollow, new SimpleListHandler<User>(observer, "followers"));
+            GetFollowersTask getFollowersTask = new GetFollowersTask(token, user, pageSize, lastFollow, new SimpleListHandler<User>(observer, "followers"));
             ExecuteTask(getFollowersTask);
         }
         else{
