@@ -4,12 +4,10 @@ import java.util.Objects;
 
 import edu.byu.cs.tweeter.client.cache.Cache;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.FollowTask;
-import edu.byu.cs.tweeter.client.model.service.backgroundTask.GetFeedTask;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.GetFollowersCountTask;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.GetFollowersTask;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.GetFollowingCountTask;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.GetFollowingTask;
-import edu.byu.cs.tweeter.client.model.service.backgroundTask.GetStoryTask;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.IsFollowerTask;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.UnfollowTask;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.handler.SimpleBoolHandler;
@@ -21,7 +19,6 @@ import edu.byu.cs.tweeter.client.model.service.backgroundTask.observer.SimpleInt
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.observer.SimpleListObserver;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.observer.SimpleNotificationObserver;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
-import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.domain.User;
 
 public class FollowService extends Service {
@@ -37,21 +34,6 @@ public class FollowService extends Service {
         }
         else{
             throw new RuntimeException("Wrong input: following or followers in FollowService");
-        }
-    }
-    public void loadMoreItems(User user, int pageSize, Status lastStatus, String type, SimpleListObserver<Status> observer) {
-        if (Objects.equals(type, "story")){
-            GetStoryTask getStoryTask = new GetStoryTask(Cache.getInstance().getCurrUserAuthToken(),
-                    user, pageSize, lastStatus, new SimpleListHandler<Status>(observer, "story"));
-            ExecuteTask(getStoryTask);
-        }
-        else if (Objects.equals(type, "feed")){
-            GetFeedTask getFeedTask = new GetFeedTask(Cache.getInstance().getCurrUserAuthToken(),
-                    user, pageSize, lastStatus, new SimpleListHandler<Status>(observer, "feed"));
-            ExecuteTask(getFeedTask);
-        }
-        else{
-            throw new RuntimeException("Wrong input: feed or story in FollowService");
         }
     }
     public void updateFollowingAndFollowers(User selectedUser, SimpleIntObserver observer) {

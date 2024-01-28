@@ -20,7 +20,7 @@ public class GetUserTask extends AuthenticatedTask {
     /**
      * Alias (or handle) for user whose profile is being retrieved.
      */
-    private String alias;
+    private final String alias;
     private User user;
 
     public GetUserTask(AuthToken authToken, String alias, Handler messageHandler) {

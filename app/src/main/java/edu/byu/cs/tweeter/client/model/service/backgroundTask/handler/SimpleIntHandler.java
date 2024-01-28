@@ -6,7 +6,7 @@ import edu.byu.cs.tweeter.client.model.service.backgroundTask.BackgroundTask;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.observer.SimpleIntObserver;
 
 public class SimpleIntHandler extends BackgroundTaskHandler<SimpleIntObserver> {
-    private String followType;
+    private final String followType;
     public SimpleIntHandler(SimpleIntObserver observer, String followType) {
         super(observer);
         this.followType = followType;

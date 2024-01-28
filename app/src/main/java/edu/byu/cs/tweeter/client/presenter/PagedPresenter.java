@@ -3,6 +3,7 @@ package edu.byu.cs.tweeter.client.presenter;
 import java.util.List;
 
 import edu.byu.cs.tweeter.client.model.service.FollowService;
+import edu.byu.cs.tweeter.client.model.service.StatusService;
 import edu.byu.cs.tweeter.client.model.service.UserService;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.observer.SimpleListObserver;
 import edu.byu.cs.tweeter.client.model.service.backgroundTask.observer.UserAuthObserver;
@@ -28,12 +29,14 @@ PagedPresenter<T> extends Presenter {
     protected final ItemView<T> view;
     protected final FollowService followService;
     protected final UserService userService;
+    protected final StatusService statusService;
     private final String type;
     public PagedPresenter(ItemView<T> view, String type) {
         this.view = view;
         this.type = type;
         userService = new UserService();
         followService = new FollowService();
+        statusService = new StatusService();
     }
     public void loadMoreItems(User user) {
         if (!isLoading) {

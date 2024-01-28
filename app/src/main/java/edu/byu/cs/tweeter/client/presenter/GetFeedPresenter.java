@@ -9,6 +9,6 @@ public class GetFeedPresenter extends PagedPresenter<Status>{
     }
     @Override
     public void loadItems(User user) {
-        followService.loadMoreItems(user, PAGE_SIZE, last, "feed", new GetListObserver());
+        statusService.loadMoreItems(user, PAGE_SIZE, last, "feed", new GetListObserver());
     }
 }

@@ -17,7 +17,7 @@ public class PostStatusTask extends AuthenticatedTask {
      * The new status being sent. Contains all properties of the status,
      * including the identity of the user sending the status.
      */
-    private Status status;
+    private final Status status;
 
     public PostStatusTask(AuthToken authToken, Status status, Handler messageHandler) {
         super(authToken,messageHandler);

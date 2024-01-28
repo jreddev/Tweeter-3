@@ -19,11 +19,11 @@ public class IsFollowerTask extends AuthenticatedTask {
     /**
      * The alleged follower.
      */
-    private User follower;
+    private final User follower;
     /**
      * The alleged followee.
      */
-    private User followee;
+    private final User followee;
     private boolean isFollower;
 
     public IsFollowerTask(AuthToken authToken, User follower, User followee, Handler messageHandler) {

@@ -1,7 +1,5 @@
 package edu.byu.cs.tweeter.client.model.service;
 
-import android.os.Looper;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,34 +17,31 @@ public class FollowServiceTest <T> {
 
     private User currentUser;
     private AuthToken currentAuthToken;
-
     private FollowService followServiceSpy;
     private FollowServiceObserver observer;
-
     private CountDownLatch countDownLatch;
 
-    /**
-     * Create a FollowService spy that uses a mock ServerFacade to return known responses to
-     * requests.
-     */
     @BeforeEach
     public void setup() {
         currentUser = getDummyUser();
         currentAuthToken = getDummyAuthToken();
-
         followServiceSpy = Mockito.spy(new FollowService());
-
-        // Setup an observer for the FollowService
         observer = new FollowServiceObserver();
-
-        // Prepare the countdown latch
         resetCountDownLatch();
+    }
+    User getDummyUser() {
+        return getFakeData().getFirstUser();
+    }
+    AuthToken getDummyAuthToken() {
+        return getFakeData().getAuthToken();
+    }
+    FakeData getFakeData() {
+        return FakeData.getInstance();
     }
 
     private void resetCountDownLatch() {
         countDownLatch = new CountDownLatch(1);
     }
-
     private void awaitCountDownLatch() throws InterruptedException {
         countDownLatch.await();
         resetCountDownLatch();
@@ -113,10 +108,9 @@ public class FollowServiceTest <T> {
             return exception;
         }
     }
-
     @Test
     public void testGetFollowees_validRequest_correctResponse() throws InterruptedException {
-        followServiceSpy.loadMoreItems(currentAuthToken, currentUser, 3, (User) null, "followers", (SimpleListObserver<User>) observer);
+        followServiceSpy.loadMoreItems(currentAuthToken, currentUser, 3, null, "followers", (SimpleListObserver<User>) observer);
         awaitCountDownLatch();
 
         List<User> expectedFollowees = FakeData.getInstance().getFakeUsers().subList(0, 3);
@@ -128,7 +122,7 @@ public class FollowServiceTest <T> {
     }
     @Test
     public void testGetFollowees_validRequest_loadsProfileImages() throws InterruptedException {
-        followServiceSpy.loadMoreItems(currentAuthToken, currentUser, 1, (User) null, "followers", (SimpleListObserver<User>) observer);
+        followServiceSpy.loadMoreItems(currentAuthToken, currentUser, 1, null, "followers", (SimpleListObserver<User>) observer);
         awaitCountDownLatch();
 
         List<T> followees = observer.getFollowees();
@@ -136,22 +130,12 @@ public class FollowServiceTest <T> {
     }
     @Test
     public void testGetFollowees_invalidRequest_returnsNoFollowees() throws InterruptedException {
-        followServiceSpy.loadMoreItems((AuthToken)currentAuthToken, (User) null, 0, (User) null, "followers", (SimpleListObserver<User>) observer);
+        followServiceSpy.loadMoreItems(currentAuthToken, null, 0, null, "followers", (SimpleListObserver<User>) observer);
         awaitCountDownLatch();
 
         Assertions.assertFalse(observer.isSuccess());
         Assertions.assertNull(observer.getMessage());
         Assertions.assertNull(observer.getFollowees());
         Assertions.assertFalse(observer.getHasMorePages());
-    }
-
-    User getDummyUser() {
-        return getFakeData().getFirstUser();
-    }
-    AuthToken getDummyAuthToken() {
-        return getFakeData().getAuthToken();
-    }
-    FakeData getFakeData() {
-        return FakeData.getInstance();
     }
 }

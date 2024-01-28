@@ -19,7 +19,7 @@ public class UnfollowTask extends AuthenticatedTask {
     /**
      * The user that is being followed.
      */
-    private User followee;
+    private final User followee;
 
     public UnfollowTask(AuthToken authToken, User followee, Handler messageHandler) {
         super(authToken,messageHandler);

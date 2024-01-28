@@ -10,8 +10,6 @@ public class GetStoryPresenter extends PagedPresenter<Status> {
     }
     @Override
     public void loadItems(User user) {
-        followService.loadMoreItems(user, PAGE_SIZE, last, "story", new GetListObserver());
+        statusService.loadMoreItems(user, PAGE_SIZE, last, "story", new GetListObserver());
     }
-
-
 }

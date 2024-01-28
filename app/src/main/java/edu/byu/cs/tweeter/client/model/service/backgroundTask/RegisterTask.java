@@ -17,15 +17,15 @@ public class RegisterTask extends AuthenticateTask {
     /**
      * The user's first name.
      */
-    private String firstName;
+    private final String firstName;
     /**
      * The user's last name.
      */
-    private String lastName;
+    private final String lastName;
     /**
      * The base-64 encoded bytes of the user's profile image.
      */
-    private String image;
+    private final String image;
 
     public RegisterTask(String firstName, String lastName, String username, String password,
                         String image, Handler messageHandler) {
